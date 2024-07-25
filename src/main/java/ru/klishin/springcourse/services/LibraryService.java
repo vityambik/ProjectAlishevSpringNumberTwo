@@ -1,6 +1,9 @@
 package ru.klishin.springcourse.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.klishin.springcourse.models.Book;
@@ -21,7 +24,24 @@ public class LibraryService {
         this.libraryRepository = libraryRepository;
     }
 
-    public List<Book> findAll() {
+    public List<Book> findAll(Integer page, Integer booksPerPage, String sortByYear) {
+        if (page != null && booksPerPage != null && "true".equals(sortByYear)) {
+
+            return libraryRepository.findAll(PageRequest.of(page, booksPerPage,
+                    Sort.by("yearOfPublishing"))).getContent();
+
+        }
+        if (page == null && booksPerPage == null && "true".equals(sortByYear)) {
+
+            return libraryRepository.findAll(Sort.by("yearOfPublishing"));
+
+        }
+        if (page != null && booksPerPage != null && !"true".equals(sortByYear)) {
+
+            return libraryRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
+
+        }
+
         return libraryRepository.findAll();
     }
 

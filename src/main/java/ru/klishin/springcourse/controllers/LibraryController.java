@@ -32,8 +32,10 @@ public class LibraryController {
     }
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("library", libraryService.findAll());
+    public String index(Model model, @RequestParam(value = "page", required = false) Integer page,
+                                     @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
+                                     @RequestParam(value = "sort_by_year", required = false) String sortByYear) {
+        model.addAttribute("library", libraryService.findAll(page, booksPerPage, sortByYear));
         return "books/index";
     }
 
