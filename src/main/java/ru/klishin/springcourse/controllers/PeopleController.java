@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.klishin.springcourse.dao.PersonDAO;
 import ru.klishin.springcourse.models.Person;
 import ru.klishin.springcourse.services.PeopleService;
 import ru.klishin.springcourse.util.PersonValidator;
@@ -16,7 +15,6 @@ import javax.validation.Valid;
 @RequestMapping("/people")
 public class PeopleController {
 
-//    private final PersonDAO personDAO;
     private final PersonValidator personValidator;
     private final PeopleService peopleService;
 

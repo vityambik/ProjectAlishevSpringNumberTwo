@@ -10,6 +10,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -42,4 +43,15 @@ public class Book {
     @Max(value = 2024, message = "Year of publishing must be less than 2025")
     @Column(name = "year_of_publishing")
     private int yearOfPublishing;
+
+    @Column(name = "appoint_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date appointDate;
+
+    public boolean checkForOverdue() {
+
+        int check = (int) ((new Date().getTime() - appointDate.getTime()) / (24 * 60 * 60 * 1000));
+
+        return check < 10;
+    }
 }

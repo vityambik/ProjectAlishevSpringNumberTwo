@@ -7,7 +7,9 @@
 <body>
 
 <div th:each="book : ${library}">
-    <a th:href="@{/books/{book_id}(book_id=${book.getBookId()})}"
+    <a style="color:green" th:unless="${book.getPerson()}" th:href="@{/books/{book_id}(book_id=${book.getBookId()})}"
+       th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYearOfPublishing()}">book</a>
+    <a style="color:red" th:if="${book.getPerson()}" th:href="@{/books/{book_id}(book_id=${book.getBookId()})}"
        th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYearOfPublishing()}">book</a>
 </div>
 

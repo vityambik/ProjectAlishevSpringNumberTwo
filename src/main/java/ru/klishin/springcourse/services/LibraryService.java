@@ -2,7 +2,6 @@ package ru.klishin.springcourse.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +9,7 @@ import ru.klishin.springcourse.models.Book;
 import ru.klishin.springcourse.models.Person;
 import ru.klishin.springcourse.repositories.LibraryRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,14 +31,14 @@ public class LibraryService {
                     Sort.by("yearOfPublishing"))).getContent();
 
         }
-        if (page == null && booksPerPage == null && "true".equals(sortByYear)) {
-
-            return libraryRepository.findAll(Sort.by("yearOfPublishing"));
-
-        }
         if (page != null && booksPerPage != null && !"true".equals(sortByYear)) {
 
             return libraryRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
+
+        }
+        if (page == null && booksPerPage == null && "true".equals(sortByYear)) {
+
+            return libraryRepository.findAll(Sort.by("yearOfPublishing"));
 
         }
 
@@ -48,6 +48,14 @@ public class LibraryService {
     public Book findById(int id) {
         Optional<Book> foundBook = libraryRepository.findById(id);
         return foundBook.orElse(null);
+    }
+
+    public Book search(String searchLine) {
+        for (Book book : libraryRepository.findAll()) {
+            if(!searchLine.isEmpty() && book.getTitle().startsWith(searchLine))
+                return book;
+        }
+        return null;
     }
 
     @Transactional
@@ -64,12 +72,14 @@ public class LibraryService {
     @Transactional
     public void appointBook(Person person, Book updatedBook) {
         updatedBook.setPerson(person);
+        updatedBook.setAppointDate(new Date());
         libraryRepository.save(updatedBook);
     }
 
     @Transactional
     public void freeingBook(Book updatedBook) {
         updatedBook.setPerson(null);
+        updatedBook.setAppointDate(null);
         libraryRepository.save(updatedBook);
     }
 

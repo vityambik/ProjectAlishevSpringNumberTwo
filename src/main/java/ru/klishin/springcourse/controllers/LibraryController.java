@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.klishin.springcourse.dao.BookDAO;
 import ru.klishin.springcourse.models.Book;
 import ru.klishin.springcourse.models.Person;
 import ru.klishin.springcourse.services.LibraryService;
@@ -18,8 +17,6 @@ import javax.validation.Valid;
 @RequestMapping("/books")
 public class LibraryController {
 
-//    private final PersonDAO personDAO;
-//    private final BookDAO bookDAO;
     private final BookValidator bookValidator;
     private final LibraryService libraryService;
     private final PeopleService peopleService;
@@ -41,13 +38,16 @@ public class LibraryController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
-
-        if(libraryService.findById(id).getPerson() != null)
-            model.addAttribute("reader", peopleService.findById(libraryService.findById(id).getPerson().getPersonId()));
-
         model.addAttribute("book", libraryService.findById(id));
         model.addAttribute("people", peopleService.findAll());
         return "books/show";
+    }
+
+    @GetMapping("/search")
+    public String search(Model model, @RequestParam(value = "searchLine", required = false) String searchLine) {
+        if(searchLine != null)
+            model.addAttribute("book", libraryService.search(searchLine));
+        return "books/search";
     }
 
     @GetMapping("/new")
