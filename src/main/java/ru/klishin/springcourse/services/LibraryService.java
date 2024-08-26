@@ -65,7 +65,12 @@ public class LibraryService {
 
     @Transactional
     public void update(int id, Book updatedBook) {
+        Book bookToBeUpdated = libraryRepository.findById(id).get();
+
         updatedBook.setBookId(id);
+        updatedBook.setPerson(bookToBeUpdated.getPerson());
+        updatedBook.setAppointDate(bookToBeUpdated.getAppointDate());
+
         libraryRepository.save(updatedBook);
     }
 

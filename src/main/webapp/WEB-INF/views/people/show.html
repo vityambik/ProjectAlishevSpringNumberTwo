@@ -9,9 +9,7 @@
 <span th:text="'Человек пока не взял ни одной книги'" th:if="${myBooks.isEmpty()}"></span>
 <h3 th:text="'Книги:'" th:unless="${myBooks.isEmpty()}"></h3>
 <div th:each="myBook : ${myBooks}" th:unless="${myBooks.isEmpty()}">
-        <p style="color:green" th:if="${myBook.checkForOverdue()}"
-           th:text="${myBook.getTitle() + ', ' + myBook.getAuthor() + ', ' + myBook.getYearOfPublishing()}"></p>
-        <p style="color:red" th:unless="${myBook.checkForOverdue()}"
+        <p th:style="${myBook.checkForOverdue()}? 'color:green' : 'color:red'"
            th:text="${myBook.getTitle() + ', ' + myBook.getAuthor() + ', ' + myBook.getYearOfPublishing()}"></p>
 </div>
 <hr/>
